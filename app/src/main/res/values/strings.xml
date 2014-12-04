@@ -4,6 +4,6 @@
     <string name="app_name">Booker</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="translation_text_view"></string>
+    <string name="nothing_recieved"> nothing recieved </string>
 
 </resources>

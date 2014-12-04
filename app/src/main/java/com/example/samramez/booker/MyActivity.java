@@ -127,9 +127,16 @@ public class MyActivity extends Activity {
 
             // Define that the data expected is in JSON format
             httpPost.setHeader("Content-type", "application/json");
+            httpPost.setHeader("AccountName","gabe");
+            httpPost.setHeader("UserName","test");
+            httpPost.setHeader("Password","Book3rM!");
+            httpPost.setHeader("client_id","BookerTester");
+            httpPost.setHeader("client_secret","TesterSecret");
+
 
             // Allows you to input a stream of bytes from the URL
             InputStream inputStream = null;
+
 
             try{
 
@@ -192,9 +199,9 @@ public class MyActivity extends Activity {
         protected void onPostExecute(Void aVoid) {
 
             // Put the translations in the TextView
-            TextView translationTextView = (TextView) findViewById(R.id.translationTextView);
+            TextView resultTextView = (TextView) findViewById(R.id.TextView1);
 
-            translationTextView.setText(result);
+            resultTextView.setText(result);
 
         }
 
@@ -227,4 +234,3 @@ public class MyActivity extends Activity {
     }
 
 }
-- See more at: http://www.newthinktank.com/2014/10/make-android-apps-14/#sthash.9bs2xN6Z.dpuf
