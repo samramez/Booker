@@ -27,9 +27,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 
-public class MyActivity extends Activity {
-
-    EditText translateEditText;
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +35,11 @@ public class MyActivity extends Activity {
         setContentView(R.layout.activity_my);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.my, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -50,46 +49,28 @@ public class MyActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
+
     // Calls for the AsyncTask to execute when the translate button is clicked
-    public void onTranslateClick(View view) {
+    public void onLoginClick(View view) {
 
-        EditText translateEditText = (EditText) findViewById(R.id.editText);
+        Toast.makeText(this, "Trying to login", Toast.LENGTH_LONG).show();
 
-        // If the user entered words to translate then get the JSON data
-        if(!isEmpty(translateEditText)){
-
-            Toast.makeText(this, "Getting Translations",
-                    Toast.LENGTH_LONG).show();
-
-            // Calls for the method doInBackground to execute
-            new SaveTheFeed().execute();
-            System.out.print("code executed");
-
-        } else {
-
-            // Post an error message if they didn't enter words
-            Toast.makeText(this, "Enter Words to Translate",
-                    Toast.LENGTH_SHORT).show();
-
-        }
+        // Calls for the method doInBackground to execute
+        new SaveTheFeed().execute();
+        System.out.print("code executed");
 
     }
 
-    // Check if the user entered words to translate
-    // Returns false if not empty
-    protected boolean isEmpty(EditText editText){
 
-        // Get the text in the EditText convert it into a string, delete whitespace
-        // and check length
-        return editText.getText().toString().trim().length() == 0;
-
-    }
 
     // Allows you to perform background operations without locking up the user interface
     // until they are finished
@@ -113,8 +94,8 @@ public class MyActivity extends Activity {
 
             // Get the text from EditText
             //String wordsToTranslate = translateEditText.getText().toString();
-            String wordsToTranslate = "http://qa-app.secure-booker.com/";
-            wordsToTranslate += "WebService4/json/BusinessService.svc/accountlogin";
+            String loginApiUrl = "http://qa-app.secure-booker.com/";
+            loginApiUrl += "WebService4/json/BusinessService.svc/accountlogin";
 
             // Replace spaces in the String that was entered with + so they can be passed
             // in a URL
@@ -124,16 +105,17 @@ public class MyActivity extends Activity {
             DefaultHttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
 
             // Provide the URL for the post request
-            HttpPost httpPost = new HttpPost(wordsToTranslate);
+            HttpPost httpPost = new HttpPost(loginApiUrl);
 
             // Define that the data expected is in JSON format
             httpPost.setHeader("Content-type", "application/json");
-            httpPost.addHeader("AccountName","gabe");
+            httpPost.setHeader("AccountName","gabe");
             httpPost.addHeader("UserName","test");
             httpPost.addHeader("Password","Book3rM!");
             httpPost.addHeader("client_id","BookerTester");
             httpPost.addHeader("client_secret","TesterSecret");
 
+            System.out.print("url with login has sent");
 
             // Allows you to input a stream of bytes from the URL
             InputStream inputStream = null;
@@ -177,6 +159,8 @@ public class MyActivity extends Activity {
                 // Get the Array named translations that contains all the translations
                 JSONArray jArray = jObject.getJSONArray("translations");
 
+                System.out.print("JSON files are recieved");
+
                 // Cycles through every translation in the array
                 outputTranslations(jArray);
 
@@ -203,13 +187,14 @@ public class MyActivity extends Activity {
             TextView resultTextView = (TextView) findViewById(R.id.TextView1);
 
             resultTextView.setText(result);
+            System.out.print("Results posted on the TextView");
 
         }
 
         protected void outputTranslations(JSONArray jsonArray){
 
             // Used to get the translation using a key
-            String[] languages = {"aceess_token", "error", "error_description", "expires_in"};
+            String[] fields = {"aceess_token", "error", "error_description", "expires_in"};
 
             // Save all the translations by getting them with the key
             try{
@@ -218,8 +203,10 @@ public class MyActivity extends Activity {
 
                     JSONObject translationObject = jsonArray.getJSONObject(i);
 
-                    result = result + languages[i] + " : " +
-                            translationObject.getString(languages[i]) + "\n";
+                    result = result + fields[i] + " : " +
+                            translationObject.getString(fields[i]) + "\n";
+
+                    System.out.print("Got the Results");
 
                 }
 
