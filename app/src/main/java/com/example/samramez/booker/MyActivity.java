@@ -69,6 +69,7 @@ public class MyActivity extends Activity {
 
             // Calls for the method doInBackground to execute
             new SaveTheFeed().execute();
+            System.out.print("code executed");
 
         } else {
 
@@ -127,11 +128,11 @@ public class MyActivity extends Activity {
 
             // Define that the data expected is in JSON format
             httpPost.setHeader("Content-type", "application/json");
-            httpPost.setHeader("AccountName","gabe");
-            httpPost.setHeader("UserName","test");
-            httpPost.setHeader("Password","Book3rM!");
-            httpPost.setHeader("client_id","BookerTester");
-            httpPost.setHeader("client_secret","TesterSecret");
+            httpPost.addHeader("AccountName","gabe");
+            httpPost.addHeader("UserName","test");
+            httpPost.addHeader("Password","Book3rM!");
+            httpPost.addHeader("client_id","BookerTester");
+            httpPost.addHeader("client_secret","TesterSecret");
 
 
             // Allows you to input a stream of bytes from the URL
@@ -208,17 +209,14 @@ public class MyActivity extends Activity {
         protected void outputTranslations(JSONArray jsonArray){
 
             // Used to get the translation using a key
-            String[] languages = {"arabic", "chinese", "danish", "dutch",
-                    "french", "german", "italian", "portuguese", "russian",
-                    "spanish"};
+            String[] languages = {"aceess_token", "error", "error_description", "expires_in"};
 
             // Save all the translations by getting them with the key
             try{
 
                 for(int i = 0; i < jsonArray.length(); i++){
 
-                    JSONObject translationObject =
-                            jsonArray.getJSONObject(i);
+                    JSONObject translationObject = jsonArray.getJSONObject(i);
 
                     result = result + languages[i] + " : " +
                             translationObject.getString(languages[i]) + "\n";
