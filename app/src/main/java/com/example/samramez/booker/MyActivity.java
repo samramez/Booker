@@ -11,10 +11,13 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 public class MyActivity extends Activity {
 
@@ -103,18 +107,34 @@ public class MyActivity extends Activity {
             //wordsToTranslate = wordsToTranslate.replace(" ", "+");
 
             // Client used to grab data from a provided URL
-            DefaultHttpClient httpClient = new DefaultHttpClient(); //(new BasicHttpParams())
+            DefaultHttpClient httpClient = new DefaultHttpClient(new BasicHttpParams()); //(new BasicHttpParams())
 
             // Provide the URL for the post request
             HttpPost httpPost = new HttpPost(loginApiUrl);
 
             try{
 
-                StringEntity params =new StringEntity("{\"AccountName\":\"gabe\",\"UserName\":\"test\",\"Password\":\"Book3rM!\",\"client_id\":\"BookerTester\",\"client_secret\":\"TesterSecret\"}");
+                //String jsonstring = "{\"AccountName\":\"gabe\",\"UserName\":\"test\",\"Password\":\"Book3rM!\",\"client_id\":\"BookerTester\",\"client_secret\":\"TesterSecret\"}";
+
+                //adding Json files
+                JSONObject jsonObj = new JSONObject();
+
+                //jsonObj.put("AccountName","gabe");
+                //jsonObj.put("UserName","test");
+                //jsonObj.put("Password","Book3rM!");
+                //jsonObj.put("client_id","BookerTester");
+                //jsonObj.put("client_secret","TesterSecret");
+
+                ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("AccountName","gabe"));
+                nameValuePairs.add(new BasicNameValuePair("UserName","test"));
+                nameValuePairs.add(new BasicNameValuePair("Password","Book3rM!"));
+                nameValuePairs.add(new BasicNameValuePair("client_id","BookerTester"));
+                nameValuePairs.add(new BasicNameValuePair("client_secret","TesterSecret"));
 
                 // Define that the data expected is in JSON format
                 httpPost.addHeader("Content-type", "application/json");
-                httpPost.setEntity(params);
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 
                 System.out.println("url with login has sent");
