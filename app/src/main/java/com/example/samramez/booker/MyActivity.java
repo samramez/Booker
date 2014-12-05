@@ -13,8 +13,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,11 +61,13 @@ public class MyActivity extends Activity {
     // Calls for the AsyncTask to execute when the translate button is clicked
     public void onLoginClick(View view) {
 
-        Toast.makeText(this, "Trying to login", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Trying to login", Toast.LENGTH_SHORT).show();
 
         // Calls for the method doInBackground to execute
         new SaveTheFeed().execute();
         System.out.print("code executed");
+
+        Toast.makeText(this, "login finished", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -101,26 +103,27 @@ public class MyActivity extends Activity {
             //wordsToTranslate = wordsToTranslate.replace(" ", "+");
 
             // Client used to grab data from a provided URL
-            DefaultHttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
+            DefaultHttpClient httpClient = new DefaultHttpClient(); //(new BasicHttpParams())
 
             // Provide the URL for the post request
             HttpPost httpPost = new HttpPost(loginApiUrl);
 
-            // Define that the data expected is in JSON format
-            httpPost.setHeader("Content-type", "application/json");
-            httpPost.setHeader("AccountName","gabe");
-            httpPost.addHeader("UserName","test");
-            httpPost.addHeader("Password","Book3rM!");
-            httpPost.addHeader("client_id","BookerTester");
-            httpPost.addHeader("client_secret","TesterSecret");
-
-            System.out.print("url with login has sent");
-
-            // Allows you to input a stream of bytes from the URL
-            InputStream inputStream = null;
-
-
             try{
+
+                StringEntity params =new StringEntity("{\"AccountName\":\"gabe\",\"UserName\":\"test\",\"Password\":\"Book3rM!\",\"client_id\":\"BookerTester\",\"client_secret\":\"TesterSecret\"}");
+
+                // Define that the data expected is in JSON format
+                httpPost.addHeader("Content-type", "application/json");
+                httpPost.setEntity(params);
+
+
+                System.out.println("url with login has sent");
+
+                // Allows you to input a stream of bytes from the URL
+                InputStream inputStream = null;
+
+
+
 
                 // The client calls for the post request to execute and sends the results back
                 HttpResponse response = httpClient.execute(httpPost);
@@ -163,19 +166,19 @@ public class MyActivity extends Activity {
                 // Cycles through every translation in the array
                 outputTranslations(jArray);
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            return null;
+        return null;
         }
 
         // Called after doInBackground finishes executing
